@@ -1,23 +1,41 @@
 /* ==========================================================================
-   1. Variables - Paleta de colores
+   HOJA DE ESTILOS - MI PERFIL
+   --------------------------------------------------------------------------
+   Dirección visual: cartel editorial risográfico.
+   Papel crudo con grano, tinta negra y duotono bermellón / azul eléctrico
+   con desregistro de impresión. Retícula suiza y tipografía monumental.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. Variables - Paleta, escala y retícula
    ========================================================================== */
 :root {
-    --color-primario: #2c3e50;
-    --color-secundario: #3498db;
-    --color-acento: #e67e22;
-    --color-fondo: #f5f6fa;
-    --color-fondo-tarjeta: #ffffff;
-    --color-texto: #2c3e50;
-    --color-texto-claro: #7f8c8d;
-    --color-borde: #dcdde1;
+    /* Tintas */
+    --tinta: #0a0a0a;
+    --tinta-suave: #6b6660;
+    --papel: #f2efe6;
+    --papel-alto: #fbfaf6;
 
-    --espaciado-sm: 0.5rem;
-    --espaciado-md: 1rem;
-    --espaciado-lg: 2rem;
-    --espaciado-xl: 3rem;
+    /* Duotono risográfico */
+    --riso-rojo: #e0300f;
+    --riso-azul: #1b34c9;
 
-    --radio-borde: 8px;
-    --sombra: 0 2px 8px rgba(0, 0, 0, 0.08);
+    /* Escala de espaciado */
+    --espaciado-xs: 0.5rem;
+    --espaciado-sm: 1rem;
+    --espaciado-md: 2rem;
+    --espaciado-lg: 4rem;
+    --espaciado-xl: 7rem;
+
+    /* Tipografía */
+    --display: 'Helvetica Neue', 'Arial Black', Helvetica, Arial, sans-serif;
+    --texto: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    --mono: 'SF Mono', 'Courier New', Courier, monospace;
+
+    /* Retícula */
+    --ancho-maximo: 1140px;
+    --borde-grueso: 3px solid var(--tinta);
+    --lomo: 3.75rem;
 }
 
 /* ==========================================================================
@@ -29,115 +47,429 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+
+    /* El ticker es más ancho que la pantalla; se recorta aquí y no en <body>
+       para no romper el position:sticky del menú. */
+    overflow-x: hidden;
+}
+
 /* ==========================================================================
-   3. Tipografía general
+   3. Base - el papel
    ========================================================================== */
 body {
-    font-family: 'Segoe UI', Verdana, Arial, sans-serif;
-    color: var(--color-texto);
-    background-color: var(--color-fondo);
-    line-height: 1.6;
+    position: relative;
+    background-color: var(--papel);
+    color: var(--tinta);
+    font-family: var(--texto);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
 }
 
-h1, h2 {
-    color: var(--color-primario);
-    margin-bottom: var(--espaciado-md);
+/* Grano de impresión: trama fina superpuesta a toda la página */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    opacity: 0.55;
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            rgba(10, 10, 10, 0.035) 0px,
+            rgba(10, 10, 10, 0.035) 1px,
+            transparent 1px,
+            transparent 3px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            rgba(10, 10, 10, 0.02) 0px,
+            rgba(10, 10, 10, 0.02) 1px,
+            transparent 1px,
+            transparent 3px
+        );
 }
 
-h1 {
-    font-size: 2rem;
-}
-
-h2 {
-    font-size: 1.4rem;
-    border-bottom: 2px solid var(--color-acento);
-    padding-bottom: var(--espaciado-sm);
-}
-
-p {
-    margin-bottom: var(--espaciado-sm);
+::selection {
+    background-color: var(--riso-rojo);
+    color: var(--papel-alto);
 }
 
 /* ==========================================================================
-   4. Menú de navegación
+   4. Menú de navegación - cintillo numerado
    ========================================================================== */
 nav {
-    background-color: var(--color-primario);
-    box-shadow: var(--sombra);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: var(--tinta);
+    border-bottom: var(--borde-grueso);
+    counter-reset: menu;
 }
 
 nav ul {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    max-width: 900px;
+    max-width: var(--ancho-maximo);
     margin: 0 auto;
     padding: 0 var(--espaciado-md);
 }
 
 nav li {
-    margin: 0;
+    flex: 1 1 auto;
+    counter-increment: menu;
+    border-right: 1px solid rgba(242, 239, 230, 0.18);
+}
+
+nav li:first-child {
+    border-left: 1px solid rgba(242, 239, 230, 0.18);
 }
 
 nav a {
     display: block;
-    color: #ffffff;
+    font-family: var(--display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--papel);
     text-decoration: none;
-    padding: var(--espaciado-md) var(--espaciado-lg);
-    transition: background-color 0.2s ease;
+    padding: 1.35rem var(--espaciado-sm);
+
+    /* Barra de tinta que inunda el botón al pasar el cursor */
+    background-image: linear-gradient(var(--riso-rojo), var(--riso-rojo));
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-size: 100% 0;
+    transition: background-size 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+                color 0.3s ease,
+                letter-spacing 0.3s ease;
 }
 
-nav a:hover {
-    background-color: var(--color-secundario);
+/* Folio numérico antes de cada entrada del menú */
+nav a::before {
+    content: counter(menu, decimal-leading-zero);
+    display: inline-block;
+    margin-right: 0.75em;
+    font-size: 0.85em;
+    color: var(--riso-rojo);
+    transition: color 0.3s ease;
+}
+
+nav a:hover,
+nav a:focus-visible {
+    color: var(--papel-alto);
+    background-size: 100% 100%;
+    letter-spacing: 0.3em;
+}
+
+nav a:hover::before,
+nav a:focus-visible::before {
+    color: var(--papel-alto);
+}
+
+nav a:focus-visible {
+    outline: 2px solid var(--riso-azul);
+    outline-offset: -6px;
 }
 
 /* ==========================================================================
-   5. Contenido principal
+   5. Contenido principal - retícula editorial
    ========================================================================== */
 main {
-    max-width: 900px;
-    margin: var(--espaciado-xl) auto;
-    padding: 0 var(--espaciado-md);
+    max-width: var(--ancho-maximo);
+    margin: 0 auto;
+    padding: var(--espaciado-md) var(--espaciado-md) var(--espaciado-xl);
 }
 
+/* --- 5.1 Ticker: titular en movimiento continuo --- */
+main::before {
+    content: 'DESARROLLO BACKEND ✦ LARAVEL ✦ PHP ✦ UNAB 2026 ✦ FACULTAD DE INGENIERÍA ✦ DESARROLLO BACKEND ✦ LARAVEL ✦ PHP ✦ UNAB 2026 ✦ FACULTAD DE INGENIERÍA ✦ ';
+    display: block;
+    width: max-content;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    white-space: nowrap;
+    color: var(--riso-azul);
+    padding: var(--espaciado-xs) 0;
+    margin-bottom: var(--espaciado-lg);
+    border-top: 1px solid var(--tinta);
+    border-bottom: 1px solid var(--tinta);
+    animation: desfile 38s linear infinite;
+}
+
+@keyframes desfile {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+/* --- 5.2 Titular monumental con desregistro duotono --- */
+main h1 {
+    font-family: var(--display);
+    font-size: clamp(3rem, 13vw, 9rem);
+    font-weight: 800;
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    margin-bottom: var(--espaciado-lg);
+    padding-bottom: var(--espaciado-md);
+    border-bottom: var(--borde-grueso);
+
+    /* Capas de tinta mal registradas, como una risografía real */
+    text-shadow:
+        0.035em 0.035em 0 var(--riso-rojo),
+        0.07em 0.07em 0 var(--riso-azul);
+}
+
+/* Cintillo tipográfico sobre el titular */
+main h1::before {
+    content: 'Universidad Autónoma de Bucaramanga — Facultad de Ingeniería';
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    text-shadow: none;
+    margin-bottom: var(--espaciado-md);
+}
+
+/* ==========================================================================
+   6. Secciones - pliego con lomo lateral
+   ========================================================================== */
 section {
-    background-color: var(--color-fondo-tarjeta);
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-borde);
-    box-shadow: var(--sombra);
-    padding: var(--espaciado-lg);
+    display: grid;
+    grid-template-columns: var(--lomo) 1fr;
+    column-gap: var(--espaciado-md);
+    row-gap: 0; /* Crítico: el lomo abarca filas implícitas */
+
+    background-color: var(--papel-alto);
+    border: var(--borde-grueso);
+    padding: var(--espaciado-md);
+
+    /* Sombra sólida en duotono: dos planchas desalineadas */
+    box-shadow:
+        8px 8px 0 var(--riso-azul),
+        16px 16px 0 var(--tinta);
 }
 
+/* Todo el contenido vive en la columna derecha */
+section > *:not(h2) {
+    grid-column: 2;
+}
+
+/* --- 6.1 Lomo vertical con el nombre de la sección --- */
+section h2 {
+    grid-column: 1;
+    grid-row: 1 / span 99;
+
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+
+    font-family: var(--display);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--tinta);
+
+    justify-self: start;
+    align-self: stretch;
+    padding: var(--espaciado-xs) 0;
+    border-left: 3px solid var(--riso-rojo);
+    padding-left: var(--espaciado-xs);
+}
+
+/* --- 6.2 Fichas de datos (vista perfil) --- */
+section p {
+    max-width: 62ch;
+    margin-bottom: var(--espaciado-sm);
+    padding-bottom: var(--espaciado-sm);
+    border-bottom: 1px dotted rgba(10, 10, 10, 0.25);
+}
+
+section p:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+section p strong {
+    display: block;
+    font-family: var(--display);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--riso-azul);
+    margin-bottom: 0.2rem;
+}
+
+/* --- 6.3 Listas como índice de revista --- */
 section ul {
     list-style: none;
+    counter-reset: indice;
 }
 
 section ul li {
-    padding: var(--espaciado-sm) 0;
-    border-bottom: 1px solid var(--color-borde);
+    counter-increment: indice;
+    position: relative;
+    padding: var(--espaciado-sm) 0 var(--espaciado-sm) 4.25rem;
+    border-bottom: 1px solid rgba(10, 10, 10, 0.12);
+    transition: padding-left 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+                color 0.3s ease;
+}
+
+/* Numerales fantasma, contorneados, que se entintan al pasar el cursor */
+section ul li::before {
+    content: counter(indice, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+
+    font-family: var(--display);
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--riso-rojo);
+    transition: color 0.3s ease, -webkit-text-stroke-color 0.3s ease;
+}
+
+section ul li:hover {
+    padding-left: 5rem;
+    color: var(--riso-azul);
+}
+
+section ul li:hover::before {
+    color: var(--riso-rojo);
 }
 
 section ul li:last-child {
     border-bottom: none;
+    padding-bottom: 0;
 }
 
 /* ==========================================================================
-   6. Diseño responsive
+   7. Colofón
    ========================================================================== */
-@media (max-width: 600px) {
+main::after {
+    content: 'Taller Básico de Laravel — Camilo Calderón — MMXXVI';
+    display: block;
+    margin-top: var(--espaciado-lg);
+    padding-top: var(--espaciado-sm);
+    border-top: 1px solid var(--tinta);
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    text-align: right;
+}
+
+/* ==========================================================================
+   8. Diseño responsive
+   ========================================================================== */
+@media (max-width: 860px) {
+    :root {
+        --lomo: 2.75rem;
+    }
+
+    main h1 {
+        text-shadow:
+            0.025em 0.025em 0 var(--riso-rojo),
+            0.05em 0.05em 0 var(--riso-azul);
+    }
+}
+
+@media (max-width: 620px) {
     nav ul {
-        flex-direction: column;
+        padding: 0;
+    }
+
+    nav li {
+        flex: 1 1 50%;
+        border-bottom: 1px solid rgba(242, 239, 230, 0.18);
     }
 
     nav a {
-        padding: var(--espaciado-sm) var(--espaciado-md);
+        padding: 0.9rem 0.4rem;
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+    }
+
+    nav a:hover,
+    nav a:focus-visible {
+        letter-spacing: 0.16em;
+    }
+
+    nav a::before {
+        display: block;
+        margin: 0 0 0.2rem 0;
     }
 
     main {
-        margin: var(--espaciado-lg) auto;
+        padding: var(--espaciado-sm) var(--espaciado-sm) var(--espaciado-lg);
     }
 
+    main::before {
+        margin-bottom: var(--espaciado-md);
+    }
+
+    main h1 {
+        margin-bottom: var(--espaciado-md);
+    }
+
+    /* En pantallas pequeñas el lomo vuelve a ser un rótulo horizontal */
     section {
-        padding: var(--espaciado-md);
+        display: block;
+        padding: var(--espaciado-sm);
+        box-shadow:
+            5px 5px 0 var(--riso-azul),
+            10px 10px 0 var(--tinta);
+    }
+
+    section h2 {
+        writing-mode: horizontal-tb;
+        transform: none;
+        border-left: none;
+        border-bottom: 3px solid var(--riso-rojo);
+        padding: 0 0 var(--espaciado-xs) 0;
+        margin-bottom: var(--espaciado-md);
+    }
+
+    section ul li {
+        padding-left: 3.2rem;
+    }
+
+    section ul li:hover {
+        padding-left: 3.6rem;
+    }
+
+    section ul li::before {
+        font-size: 1.6rem;
+    }
+}
+
+/* ==========================================================================
+   9. Accesibilidad - respeta la preferencia de movimiento reducido
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    main::before {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
     }
 }
